@@ -11,10 +11,15 @@ public class LoadDatabase {
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
     @Bean
-    CommandLineRunner initDatabase(EmployeeRepository repository){
+    CommandLineRunner initDatabase(EmployeeRepository employeeRepository, OrderRepository orderRepository){
         return args -> {
-            log.info("Preloading" + repository.save(new Employee("Abiud", "Thomas", "Spring")));
-            log.info("Preloading" + repository.save(new Employee("Faraja", "Sabaya", "Fluter")));
+            employeeRepository.save(new Employee("Abiud", "Thomas", "Spring"));
+            employeeRepository.save(new Employee("Faraja", "Sabaya", "Fluter"));
+            employeeRepository.findAll().forEach(employee -> log.info("Preloading " + employee));
+
+            orderRepository.save(new Order("MacBookPro", Status.COMPLETED));
+            orderRepository.save(new Order("Iphone", Status.IN_PROGRESS));
+            orderRepository.findAll().forEach(order -> log.info("Preloading " + order));
         };
     }
 
